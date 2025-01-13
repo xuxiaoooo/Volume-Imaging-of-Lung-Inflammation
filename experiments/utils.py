@@ -40,7 +40,11 @@ class SegmentationTrainer:
         
         for batch in tqdm(train_loader, desc="Training"):
             images = batch['image'].to(self.device)
-            masks = batch['mask'].to(self.device)
+            lung_masks = batch['lung_mask'].to(self.device)
+            inflammation_masks = batch['inflammation_mask'].to(self.device)
+            
+            # 合并两种掩码
+            masks = torch.stack([lung_masks, inflammation_masks], dim=1)
             
             outputs = self.model(images)
             loss = self.criterion(outputs, masks)
@@ -60,7 +64,11 @@ class SegmentationTrainer:
         with torch.no_grad():
             for batch in tqdm(val_loader, desc="Validation"):
                 images = batch['image'].to(self.device)
-                masks = batch['mask'].to(self.device)
+                lung_masks = batch['lung_mask'].to(self.device)
+                inflammation_masks = batch['inflammation_mask'].to(self.device)
+                
+                # 合并两种掩码
+                masks = torch.stack([lung_masks, inflammation_masks], dim=1)
                 
                 outputs = self.model(images)
                 loss = self.criterion(outputs, masks)

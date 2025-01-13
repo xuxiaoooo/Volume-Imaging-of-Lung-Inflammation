@@ -37,9 +37,10 @@ class LungDataset(Dataset):
                 point = region['shape_attributes']
                 x, y = point['cx'], point['cy']
                 
-                if 'lung' in attrs and attrs['lung'].get('a'):
+                # 检查标注类型
+                if 'lung' in attrs and isinstance(attrs['lung'], dict) and attrs['lung'].get('a'):
                     lung_points.append([x, y])
-                if 'i' in attrs and attrs['i'].get('b'):
+                if 'i' in attrs and isinstance(attrs['i'], dict) and attrs['i'].get('b'):
                     inflammation_points.append([x, y])
             
             labels[filename] = {

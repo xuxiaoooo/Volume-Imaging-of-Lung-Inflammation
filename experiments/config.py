@@ -1,4 +1,5 @@
 from pathlib import Path
+import torch
 
 # 基础路径
 BASE_DIR = Path('/Users/xuxiao/Code/LIIV')
@@ -7,6 +8,7 @@ PROCESSED_DIR = DATA_DIR / 'processed'
 LABELED_DIR = DATA_DIR / 'labeled'
 PREDICTIONS_DIR = DATA_DIR / 'predictions'
 RESULTS_DIR = DATA_DIR / 'results'
+CHECKPOINTS_DIR = BASE_DIR / 'checkpoints'  # 添加检查点目录
 
 # 预处理参数
 PREPROCESSING = {
@@ -18,11 +20,11 @@ PREPROCESSING = {
 
 # 分割模型参数
 SEGMENTATION = {
-    'batch_size': 4,
-    'num_epochs': 100,
+    'batch_size': 2,
+    'num_epochs': 50,
     'learning_rate': 1e-4,
-    'device': 'cuda',
-    'num_classes': 1,
+    'device': 'cuda' if torch.cuda.is_available() else 'cpu',
+    'num_classes': 2,
     'input_channels': 1,
 }
 

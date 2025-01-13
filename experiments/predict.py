@@ -43,7 +43,7 @@ def predict():
     )
     
     # 预测所有病人
-    for patient_dir in PROCESSED_DATA_DIR.iterdir():
+    for patient_dir in PROCESSED_DIR.iterdir():
         if not patient_dir.is_dir():
             continue
         

@@ -3,6 +3,7 @@ from torch.utils.data import DataLoader
 from pathlib import Path
 import logging
 from datetime import datetime
+from torchvision import transforms
 
 from dataset import LungDataset
 from models import UNet
@@ -22,17 +23,19 @@ def train():
     logger.info("开始训练过程...")
     
     # 创建数据加载器
-    train_dataset = LungDataset(
-        str(PROCESSED_DATA_DIR),
-        str(LABELED_DATA_DIR / 'labels.json'),
-        train=True
+    dataset = LungDataset(
+        str(PROCESSED_DIR / '崔连祥'),  # 指定崔连祥的图像目录
+        str(LABELED_DIR / 'cuilianxiang.json'),  # 使用崔连祥的标注文件
+        transform=transforms.Compose([
+            transforms.Resize((256, 256)),
+            transforms.ToTensor(),
+        ])
     )
     
-    val_dataset = LungDataset(
-        str(PROCESSED_DATA_DIR),
-        str(LABELED_DATA_DIR / 'labels.json'),
-        train=False
-    )
+    # 划分训练集和验证集
+    train_size = int(0.8 * len(dataset))
+    val_size = len(dataset) - train_size
+    train_dataset, val_dataset = torch.utils.data.random_split(dataset, [train_size, val_size])
     
     train_loader = DataLoader(
         train_dataset,
