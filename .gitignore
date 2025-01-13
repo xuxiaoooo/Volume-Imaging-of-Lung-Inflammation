@@ -1,3 +1,4 @@
-# /data
-# /via-2.0.12
-# .DS_Store
+/data
+/via-2.0.12
+.DS_Store
+/checkpoints
